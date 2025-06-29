@@ -11,9 +11,12 @@
 html,
 body,
 #__next {
+  font-family: "Poppins", sans-serif;
+}
+
+.dashboard {
   height: 100%;
   overflow: hidden;
-  font-family: "Poppins", sans-serif;
 }
 
 /* 🎨 Support Graphics */
@@ -28,7 +31,6 @@ body,
 .support-top-graphics.support-adjust-graphics {
   top: -9.4rem;
 }
-
 
 /* styles/globals.css */
 .btn-primary {

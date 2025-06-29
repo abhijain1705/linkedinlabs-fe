@@ -1,24 +1,53 @@
-import React from "react";
+/* eslint-disable @next/next/no-img-element */
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import { apiResponseKeyName, profileURLKeyName } from "@/utils";
 
 type FormValues = {
   profileUrl: string;
 };
 
 const Hero: React.FC = () => {
+  const router = useRouter();
+
+  const [loader, setloader] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>();
 
-  const onSubmit = (data: FormValues) => {
-    console.log("Profile URL Submitted:", data.profileUrl);
-    // You can call an API or navigate based on URL here
+  const onSubmit = async (data: FormValues) => {
+    try {
+      setloader(true);
+      const response = await axios.post(
+        "http://localhost:5000/api/analyze/analyzeProfile",
+        {
+          profileUrl: data.profileUrl,
+        }
+      );
+      toast.success("Profile analyzed successfully!");
+      sessionStorage.setItem(apiResponseKeyName, JSON.stringify(response.data));
+      sessionStorage.setItem(profileURLKeyName, data.profileUrl);
+      setTimeout(() => {
+        router.push("/Dashboard");
+      }, 2000);
+      // Handle response (e.g., show results or navigate)
+    } catch (error) {
+      toast.error("Failed to analyze profile. Please try again.");
+      console.error("API Error:", error);
+      // Handle error (e.g., show error message)
+    } finally {
+      setloader(false);
+    }
   };
 
   return (
-      <section className="bg-white relative w-full text-center px-4 py-12">
+    <section className="bg-white relative w-full text-center px-4 py-12">
       {/* Decorative Graphic */}
       <div className="support-top-graphics support-adjust-graphics">
         <img
@@ -31,48 +60,55 @@ const Hero: React.FC = () => {
           className="support-top-graphics-pic"
         />
       </div>
-    <section className="min-h-screen flex flex-col items-center justify-center text-center px-4">
-      <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight text-black mb-4">
-        <span className="block text-gray-400 text-3xl sm:text-5xl">The #1</span>
-        <span className="text-[#1475b1]">LinkedIn Profile Optimizer</span>
-      </h1>
+      <section className="min-h-screen flex flex-col items-center justify-center text-center px-4">
+        <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight text-black mb-4">
+          <span className="block text-gray-400 text-3xl sm:text-5xl">
+            The #1
+          </span>
+          <span className="text-[#1475b1]">LinkedIn Profile Optimizer</span>
+        </h1>
 
-      <p className="text-gray-500 max-w-xl mb-6 text-lg sm:text-xl">
-        Modern, powerful, affordable platform to optimize your LinkedIn profile
-      </p>
+        <p className="text-gray-500 max-w-xl mb-6 text-lg sm:text-xl">
+          Modern, powerful, affordable platform to optimize your LinkedIn
+          profile
+        </p>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col sm:flex-row items-center gap-4 justify-center mt-8"
-      >
-        <input
-          type="text"
-          placeholder="Enter LinkedIn Profile URL"
-          {...register("profileUrl", {
-            required: "Profile URL is required",
-            pattern: {
-              value: /^https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9-_]+\/?$/,
-              message: "Enter a valid LinkedIn profile URL",
-            },
-          })}
-          className={`px-4 py-3 border ${
-            errors.profileUrl ? "border-red-500" : "border-black"
-          } rounded-md shadow-[3px_3px_0_0_#000] focus:outline-none focus:ring-2 focus:ring-black`}
-        />
-
-        <button
-          type="submit"
-          id="analyze-button"
-          className="bg-white border-2 border-black text-black px-6 py-3 rounded-md font-semibold shadow-[3px_3px_0_0_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_0_#fff] transition-transform duration-100"
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col sm:flex-row items-center gap-4 justify-center mt-8"
         >
-          Analyze
-        </button>
-      </form>
+          <input
+            type="text"
+            placeholder="Enter LinkedIn Profile URL"
+            {...register("profileUrl", {
+              required: "Profile URL is required",
+              pattern: {
+                value:
+                  /^https:\/\/(www\.)?linkedin\.com\/in\/[a-zA-Z0-9-_]+\/?$/,
+                message: "Enter a valid LinkedIn profile URL",
+              },
+            })}
+            className={`px-4 py-3 border ${
+              errors.profileUrl ? "border-red-500" : "border-black"
+            } rounded-md shadow-[3px_3px_0_0_#000] focus:outline-none focus:ring-2 focus:ring-black`}
+          />
 
-      {errors.profileUrl && (
-        <p className="mt-2 text-red-500 text-sm">{errors.profileUrl.message}</p>
-      )}
-    </section>
+          <button
+            type="submit"
+            id="analyze-button"
+            disabled={loader}
+            className="bg-white border-2 border-black text-black px-6 py-3 rounded-md font-semibold shadow-[3px_3px_0_0_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_0_#fff] transition-transform duration-100"
+          >
+            {loader ? "Analyzing..." : "Analyze"}
+          </button>
+        </form>
+
+        {errors.profileUrl && (
+          <p className="mt-2 text-red-500 text-sm">
+            {errors.profileUrl.message}
+          </p>
+        )}
+      </section>
     </section>
   );
 };
