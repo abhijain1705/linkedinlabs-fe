@@ -43,10 +43,10 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
 
       {/* Center Links */}
       <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700">
-        <a href="#" className="hover:text-black transition">
+        <a href="#faq" className="hover:text-black transition">
           FAQ
         </a>
-        <a href="#" className="hover:text-black transition">
+        <a href="#features" className="hover:text-black transition">
           Features
         </a>
         

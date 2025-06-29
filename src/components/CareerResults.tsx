@@ -60,7 +60,7 @@ const features = [
 
 const CareerResults: React.FC = () => {
   return (
-    <div className="bg-gradient-to-b from-[#e9f4ff] to-[#f4faff] py-16 px-4 text-center">
+    <div id="features" className="bg-gradient-to-b from-[#e9f4ff] to-[#f4faff] py-16 px-4 text-center">
       {/* 🔥 Feature List Section */}
       <div className="mt-10">
         <motion.h3

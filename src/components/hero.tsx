@@ -1,10 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { apiResponseKeyName, profileURLKeyName } from "@/utils";
+import { useAnimation, motion } from "framer-motion";
 
 type FormValues = {
   profileUrl: string;
@@ -46,21 +46,39 @@ const Hero: React.FC = () => {
     }
   };
 
+  const controls = useAnimation();
+
+  useEffect(() => {
+    controls.start({
+      d: [
+        // Path 1
+        "M0,160L48,170.7C96,181,192,203,288,208C384,213,480,203,576,176C672,149,768,107,864,96C960,85,1056,107,1152,122.7C1248,139,1344,149,1392,154.7L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z",
+        // Path 2
+        "M0,192L48,186.7C96,181,192,171,288,176C384,181,480,203,576,218.7C672,235,768,245,864,240C960,235,1056,213,1152,186.7C1248,160,1344,128,1392,112L1440,96L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z",
+        // Loop back to Path 1
+        "M0,160L48,170.7C96,181,192,203,288,208C384,213,480,203,576,176C672,149,768,107,864,96C960,85,1056,107,1152,122.7C1248,139,1344,149,1392,154.7L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z",
+      ],
+      transition: {
+        repeat: Infinity,
+        duration: 8,
+        ease: "easeInOut",
+      },
+    });
+  }, [controls]);
+
   return (
-    <section className="bg-white relative w-full text-center px-4 py-12">
-      {/* Decorative Graphic */}
-      <div className="support-top-graphics support-adjust-graphics">
-        <img
-          width="1042"
-          sizes="(max-width: 1439px) 100vw, 1042px"
-          alt=""
-          src="https://cdn.prod.website-files.com/635c591378332f38be25d45f/674830616e40dac74f0c2dc4_subsection-dots.svg.webp"
-          loading="eager"
-          srcSet="https://cdn.prod.website-files.com/635c591378332f38be25d45f/674830616e40dac74f0c2dc4_subsection-dots.svg-p-500.png 500w, https://cdn.prod.website-files.com/635c591378332f38be25d45f/674830616e40dac74f0c2dc4_subsection-dots.svg-p-800.png 800w, https://cdn.prod.website-files.com/635c591378332f38be25d45f/674830616e40dac74f0c2dc4_subsection-dots.svg-p-1080.png 1080w, https://cdn.prod.website-files.com/635c591378332f38be25d45f/674830616e40dac74f0c2dc4_subsection-dots.svg-p-1600.png 1600w, https://cdn.prod.website-files.com/635c591378332f38be25d45f/674830616e40dac74f0c2dc4_subsection-dots.svg.webp 2084w"
-          className="support-top-graphics-pic"
-        />
-      </div>
-      <section className="min-h-screen flex flex-col items-center justify-center text-center px-4">
+    <section className="relative w-full bg-white overflow-hidden">
+      {/* 🌊 Top Moving Wave */}
+      <svg
+        viewBox="0 0 1440 320"
+        className="absolute top-0 left-0 w-full h-40 sm:h-64 z-0"
+        preserveAspectRatio="none"
+      >
+        <motion.path fill="#e0f4ff" initial={false} animate={controls} />
+      </svg>
+
+      {/* 💬 Content */}
+      <section className="relative z-10 min-h-screen flex flex-col items-center justify-center text-center px-4">
         <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight text-black mb-4">
           <span className="block text-gray-400 text-3xl sm:text-5xl">
             The #1
@@ -95,7 +113,6 @@ const Hero: React.FC = () => {
 
           <button
             type="submit"
-            id="analyze-button"
             disabled={loader}
             className="bg-white border-2 border-black text-black px-6 py-3 rounded-md font-semibold shadow-[3px_3px_0_0_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_0_#fff] transition-transform duration-100"
           >
@@ -109,6 +126,15 @@ const Hero: React.FC = () => {
           </p>
         )}
       </section>
+
+      {/* 🌊 Bottom Moving Wave */}
+      <svg
+        viewBox="0 0 1440 320"
+        className="absolute bottom-0 left-0 w-full h-40 sm:h-64 rotate-180 z-0"
+        preserveAspectRatio="none"
+      >
+        <motion.path fill="#e0f4ff" initial={false} animate={controls} />
+      </svg>
     </section>
   );
 };
