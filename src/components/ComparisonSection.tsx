@@ -1,51 +1,51 @@
 import { motion } from "framer-motion";
 import {
-  FaClock,
-  FaTools,
-  FaFileAlt,
-  FaThumbsUp,
-  FaCheckCircle,
+  FaUserSlash,
+  FaRegFileAlt,
+  FaPuzzlePiece,
+  FaChartLine,
+  FaLightbulb,
+  FaMagic,
 } from "react-icons/fa";
-
 
 const items = [
   {
-    title: "Rejection",
-    desc: "Non-compliant resumes lead to rejections",
-    icon: <FaFileAlt className="text-red-500 text-xl" />,
+    title: "Incomplete Profiles",
+    desc: "Missing summaries or vague job descriptions lead to missed opportunities.",
+    icon: <FaUserSlash className="text-red-500 text-xl" />,
     color: "border-red-300 bg-red-50",
   },
   {
-    title: "Time Wasted",
-    desc: "Job searching is a time-consuming task",
-    icon: <FaClock className="text-red-400 text-xl" />,
+    title: "Generic Summaries",
+    desc: "Copy-paste About sections don’t stand out to recruiters.",
+    icon: <FaRegFileAlt className="text-red-400 text-xl" />,
     color: "border-gray-300 bg-white",
   },
   {
-    title: "Fragmented Tools",
-    desc: "Switching between multiple tools is stressful",
-    icon: <FaTools className="text-red-400 text-xl" />,
+    title: "Confusing Optimization",
+    desc: "No clear guidance on how to improve your LinkedIn profile.",
+    icon: <FaPuzzlePiece className="text-red-400 text-xl" />,
     color: "border-gray-300 bg-white",
   },
 ];
 
 const solutions = [
   {
-    title: "No More Rejections",
-    desc: "Instantly create ATS-friendly resumes",
-    icon: <FaThumbsUp className="text-green-500 text-xl" />,
+    title: "Section-Wise AI Scoring",
+    desc: "Each section is scored to show you where you shine—and where to improve.",
+    icon: <FaChartLine className="text-green-500 text-xl" />,
     color: "border-green-300 bg-green-50",
   },
   {
-    title: "Save Time",
-    desc: "Careerflow's AI tools simplify your job search",
-    icon: <FaClock className="text-green-400 text-xl" />,
+    title: "Personalized Feedback",
+    desc: "Get AI-powered comments tailored to your profile’s strengths and gaps.",
+    icon: <FaLightbulb className="text-green-400 text-xl" />,
     color: "border-gray-300 bg-white",
   },
   {
-    title: "All in One Solution",
-    desc: "Manage your entire job search in one platform",
-    icon: <FaCheckCircle className="text-green-400 text-xl" />,
+    title: "One-Click Rewrite",
+    desc: "Regenerate About and Experience with role-specific improvements.",
+    icon: <FaMagic className="text-green-400 text-xl" />,
     color: "border-gray-300 bg-white",
   },
 ];
