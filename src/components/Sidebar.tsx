@@ -16,12 +16,13 @@ const Sidebar: React.FC<Props> = ({ isMobile, profileUrl }) => {
 
   const handleSave = () => {
     setIsEditing(false);
-    // You can optionally send editedUrl to backend here
+    // Optional: send editedUrl to backend
     console.log("Saved URL:", editedUrl);
   };
 
   return (
-    <aside className="w-[300px] border-r border-gray-300 p-4 flex flex-col gap-6">
+    <aside className="w-[300px] border-r overflow-y-scroll h-full pb-30 border-gray-300 p-4 flex flex-col gap-6">
+      {/* Logo for mobile view */}
       {isMobile && (
         <Link href="/">
           <div className="shadow-sm rounded-lg p-1">
@@ -35,35 +36,51 @@ const Sidebar: React.FC<Props> = ({ isMobile, profileUrl }) => {
           </div>
         </Link>
       )}
-      {/* URL row */}
-      <div className="flex items-start gap-2 w-full break-all">
-        {isEditing ? (
-          <>
-            <input
-              type="text"
-              value={editedUrl}
-              onChange={(e) => setEditedUrl(e.target.value)}
-              className="text-sm border border-gray-300 rounded px-2 py-1 w-full"
-            />
-            <FaSave
-              className="cursor-pointer text-green-600 hover:text-green-800 flex-shrink-0 mt-1"
-              onClick={handleSave}
-            />
-          </>
-        ) : (
-          <>
-            <span className="text-sm break-words w-full">{editedUrl}</span>
-            <FaEdit
-              className="cursor-pointer text-gray-500 hover:text-black flex-shrink-0 mt-1"
-              onClick={() => setIsEditing(true)}
-            />
-          </>
-        )}
+
+      {/* LinkedIn URL Section */}
+      <div>
+        <h4 className="text-sm font-semibold text-gray-600 mb-2">LinkedIn Profile URL</h4>
+        <div className="flex items-start gap-2 w-full break-all">
+          {isEditing ? (
+            <>
+              <input
+                type="text"
+                value={editedUrl}
+                onChange={(e) => setEditedUrl(e.target.value)}
+                className="text-sm border border-gray-300 rounded px-2 py-1 w-full"
+              />
+              <FaSave
+                className="cursor-pointer text-green-600 hover:text-green-800 flex-shrink-0 mt-1"
+                onClick={handleSave}
+              />
+            </>
+          ) : (
+            <>
+              <span className="text-sm break-words w-full">{editedUrl}</span>
+              <FaEdit
+                className="cursor-pointer text-gray-500 hover:text-black flex-shrink-0 mt-1"
+                onClick={() => setIsEditing(true)}
+              />
+            </>
+          )}
+        </div>
       </div>
 
-      {/* Chips + Prompt */}
-      <IndustryChips />
-      <PromptInput />
+      <hr className="border-t border-gray-200" />
+
+      {/* Industry Selection */}
+      <div>
+        <h4 className="text-sm font-semibold text-gray-600 mb-2">Select Industry</h4>
+        <IndustryChips />
+      </div>
+
+      <hr className="border-t border-gray-200" />
+
+      {/* Prompt Section */}
+      <div>
+        <h4 className="text-sm font-semibold text-gray-600 mb-2">Ask AI for Suggestions</h4>
+        <PromptInput />
+      </div>
     </aside>
   );
 };

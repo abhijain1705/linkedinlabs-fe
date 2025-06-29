@@ -1,4 +1,20 @@
-const industries = ["Tech", "Marketing", "Finance", "Design"];
+const industries = [
+  "Tech",
+  "Marketing",
+  "Finance",
+  "Design",
+  "Legal Services",
+  "Healthcare",
+  "Education & EdTech",
+  "Real Estate",
+  "Human Resources",
+  "Consulting",
+  "Freelancing",
+  "E-commerce",
+  "SaaS & B2B",
+  "Startups & Entrepreneurship",
+  "Nonprofits & NGOs"
+];
 
 const IndustryChips: React.FC = () => {
   return (

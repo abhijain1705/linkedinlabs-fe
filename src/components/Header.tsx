@@ -15,7 +15,7 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   const isHome = router.pathname === "/";
 
   return (
-    <header className="w-full z-[100] px-6 py-4 flex items-center justify-between bg-white shadow-sm relative">
+    <header className="w-full z-[100] px-6 fixed py-4 flex items-center justify-between bg-white shadow-sm">
       {/* Left Side: Hamburger + Logo */}
       <div className="flex items-center gap-3">
         {/* Show hamburger ONLY if not on home page AND handler exists */}

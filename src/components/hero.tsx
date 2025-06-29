@@ -18,6 +18,19 @@ const Hero: React.FC = () => {
   };
 
   return (
+      <section className="bg-white relative w-full text-center px-4 py-12">
+      {/* Decorative Graphic */}
+      <div className="support-top-graphics support-adjust-graphics">
+        <img
+          width="1042"
+          sizes="(max-width: 1439px) 100vw, 1042px"
+          alt=""
+          src="https://cdn.prod.website-files.com/635c591378332f38be25d45f/674830616e40dac74f0c2dc4_subsection-dots.svg.webp"
+          loading="eager"
+          srcSet="https://cdn.prod.website-files.com/635c591378332f38be25d45f/674830616e40dac74f0c2dc4_subsection-dots.svg-p-500.png 500w, https://cdn.prod.website-files.com/635c591378332f38be25d45f/674830616e40dac74f0c2dc4_subsection-dots.svg-p-800.png 800w, https://cdn.prod.website-files.com/635c591378332f38be25d45f/674830616e40dac74f0c2dc4_subsection-dots.svg-p-1080.png 1080w, https://cdn.prod.website-files.com/635c591378332f38be25d45f/674830616e40dac74f0c2dc4_subsection-dots.svg-p-1600.png 1600w, https://cdn.prod.website-files.com/635c591378332f38be25d45f/674830616e40dac74f0c2dc4_subsection-dots.svg.webp 2084w"
+          className="support-top-graphics-pic"
+        />
+      </div>
     <section className="min-h-screen flex flex-col items-center justify-center text-center px-4">
       <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight text-black mb-4">
         <span className="block text-gray-400 text-3xl sm:text-5xl">The #1</span>
@@ -59,6 +72,7 @@ const Hero: React.FC = () => {
       {errors.profileUrl && (
         <p className="mt-2 text-red-500 text-sm">{errors.profileUrl.message}</p>
       )}
+    </section>
     </section>
   );
 };

@@ -9,11 +9,13 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Header onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+      <div className="pt-20">
       <Component
         setIsSidebarOpen={setIsSidebarOpen}
         isSidebarOpen={isSidebarOpen}
         {...pageProps}
       />
+      </div>
     </>
   );
 }
