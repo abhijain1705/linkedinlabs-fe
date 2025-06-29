@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react"; // 👈 Import the dropdown icon
+import { ChevronDown } from "lucide-react";
 
 type FAQItem = {
   question: string;
@@ -79,7 +79,9 @@ const FAQ: React.FC = () => {
                 onClick={() => toggleFAQ(index)}
                 className="w-full px-6 py-4 text-left flex justify-between items-center"
               >
-                <span className="font-medium text-gray-800">{item.question}</span>
+                <span className="font-medium text-gray-800">
+                  {item.question}
+                </span>
                 <motion.div
                   animate={{ rotate: openIndex === index ? 180 : 0 }}
                   transition={{ duration: 0.3 }}

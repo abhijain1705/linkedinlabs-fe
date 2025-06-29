@@ -1,6 +1,16 @@
 import Sidebar from "@/components/Sidebar";
 import DMainContent from "@/components/dashboardMain";
-import { useTheme, useMediaQuery, Drawer } from "@mui/material";
+import { useEffect, useState } from "react";
+import {
+  useTheme,
+  useMediaQuery,
+  Drawer,
+  CircularProgress,
+} from "@mui/material";
+import { apiResponseKeyName, profileURLKeyName } from "@/utils";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import { AIResponse } from "@/types/linkedin";
 
 type DashboardProps = {
   isSidebarOpen: boolean;
@@ -11,48 +21,68 @@ const Dashboard: React.FC<DashboardProps> = ({
   isSidebarOpen,
   setIsSidebarOpen,
 }) => {
-  const profileUrl = "https://www.linkedin.com/in/abhijain03W";
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
+  const router = useRouter();
+  const [profileURL, setprofileURL] = useState("");
+  const [aiResponse, setaiResponse] = useState<AIResponse | null>(null);
+
+  useEffect(() => {
+    const url = sessionStorage.getItem(profileURLKeyName);
+    const jsonData = sessionStorage.getItem(apiResponseKeyName);
+    if (!url || !jsonData) {
+      toast.error("No data found");
+      router.push("/");
+    } else {
+      setprofileURL(url ?? "");
+      setaiResponse(JSON.parse(jsonData) ?? {});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!aiResponse) {
+    return <CircularProgress />;
+  }
+
   return (
     <div className="dashboard">
-    <div className="flex h-screen w-screen overflow-hidden">
-      {/* Sidebar: static for desktop */}
-      {!isMobile && (
-        <div className="w-72 flex-shrink-0 border-r border-gray-200">
-          <Sidebar isMobile={isMobile} profileUrl={profileUrl} />
-        </div>
-      )}
+      <div className="flex h-screen w-screen overflow-hidden">
+        {/* Sidebar: static for desktop */}
+        {!isMobile && (
+          <div className="w-72 flex-shrink-0 border-r border-gray-200">
+            <Sidebar isMobile={isMobile} profileURL={profileURL} />
+          </div>
+        )}
 
-      {/* Drawer for mobile only */}
-      {isMobile && (
-        <div className="lg:hidden">
-          {/* Mobile Drawer */}
-          <Drawer
-            variant="temporary"
-            open={isSidebarOpen}
-            onClose={() => setIsSidebarOpen(false)}
-            ModalProps={{ keepMounted: true }}
-            sx={{
-              width: 300,
-              "& .MuiDrawer-paper": {
+        {/* Drawer for mobile only */}
+        {isMobile && (
+          <div className="lg:hidden">
+            {/* Mobile Drawer */}
+            <Drawer
+              variant="temporary"
+              open={isSidebarOpen}
+              onClose={() => setIsSidebarOpen(false)}
+              ModalProps={{ keepMounted: true }}
+              sx={{
                 width: 300,
-                boxSizing: "border-box",
-                borderRight: "1px solid #e5e7eb",
-              },
-            }}
-          >
-            <Sidebar isMobile={isMobile} profileUrl={profileUrl} />
-          </Drawer>
-        </div>
-      )}
+                "& .MuiDrawer-paper": {
+                  width: 300,
+                  boxSizing: "border-box",
+                  borderRight: "1px solid #e5e7eb",
+                },
+              }}
+            >
+              <Sidebar isMobile={isMobile} profileURL={profileURL} />
+            </Drawer>
+          </div>
+        )}
 
-      {/* Scrollable Main Content */}
-      <main className="flex-1 overflow-y-auto h-screen">
-        <DMainContent />
-      </main>
-    </div>
+        {/* Scrollable Main Content */}
+        <main className="flex-1 overflow-y-auto h-screen">
+          <DMainContent aiResponse={aiResponse} />
+        </main>
+      </div>
     </div>
   );
 };

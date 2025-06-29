@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { FaCircle } from "react-icons/fa";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import ProfileHeader from "./linkedin/ProfileHeader";
@@ -7,36 +6,20 @@ import SuggestionsAnalytics from "./linkedin/SuggestionsAnalytics";
 import AboutFeatured from "./linkedin/AboutFeatured";
 import Activity from "./linkedin/Activity";
 import EducationProjects from "./linkedin/EducationProjects";
-
-const data = [
-  {
-    title: "Profile Completeness",
-    value: "25/30",
-    text: `• Includes About, Experience, Education, Skills, and Contact Info
-• No sections left blank or generic
-• All experiences have descriptions`,
-  },
-  {
-    title: "Professional Quality",
-    value: "35/40",
-    text: `• Writing clarity, grammar, and tone
-• Structured Experience and About sections
-• Achievements and roles clearly described and quantified
-• Consistency and formatting`,
-  },
-  {
-    title: "Activity Level",
-    value: "25/30",
-    text: `• Regular posts, shares, articles, or engagement
-• Presence of multimedia content (images/videos)
-• Active interaction with network`,
-  },
-];
+import { AIResponse } from "../types/linkedin";
+import { CircularProgress } from "@mui/material";
 
 // Convert value like "25/30" → 83.3
 const getPercentage = (valueStr: string): number => {
   const [num, total] = valueStr.split("/").map(Number);
   return Math.round((num / total) * 100);
+};
+
+const decodeCamelCase = (word: string) => {
+  return word
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (str) => str.toUpperCase())
+    .trim();
 };
 
 const getColorClass = (percent: number) => {
@@ -53,28 +36,46 @@ const getProgressColor = (percent: number) => {
   return "#22c55e"; // dark green
 };
 
-export default function DMainContent() {
+export default function DMainContent({
+  aiResponse,
+}: {
+  aiResponse: AIResponse;
+}) {
+  const { data } = aiResponse;
   const [activeTab, setActiveTab] = useState("Scoring");
-  const generalScore = 83;
 
   const tabClass = (tab: string) =>
-    `px-4 py-2 rounded-t-md border-b-2 font-medium ${activeTab === tab
-      ? "border-blue-600 text-blue-600"
-      : "border-transparent text-gray-500 hover:text-blue-600"
+    `px-4 py-2 rounded-t-md border-b-2 font-medium ${
+      activeTab === tab
+        ? "border-blue-600 text-blue-600"
+        : "border-transparent text-gray-500 hover:text-blue-600"
     }`;
+
+  if (data === undefined || data === null) {
+    return <CircularProgress />;
+  }
 
   return (
     <section className="flex-1 bg-gray-50 p-10 pb-30 overflow-y-auto">
       {/* Tabs */}
       <div className="flex justify-center mb-8">
         <div className="flex gap-6 border-b border-gray-300">
-          <button onClick={() => setActiveTab("Scoring")} className={tabClass("Scoring")}>
+          <button
+            onClick={() => setActiveTab("Scoring")}
+            className={tabClass("Scoring")}
+          >
             Scoring
           </button>
-          <button onClick={() => setActiveTab("Current")} className={tabClass("Current")}>
+          <button
+            onClick={() => setActiveTab("Current")}
+            className={tabClass("Current")}
+          >
             Current LinkedIn Profile
           </button>
-          <button onClick={() => setActiveTab("Improvised")} className={tabClass("Improvised")}>
+          <button
+            onClick={() => setActiveTab("Improvised")}
+            className={tabClass("Improvised")}
+          >
             Improvised LinkedIn Profile
           </button>
         </div>
@@ -91,8 +92,8 @@ export default function DMainContent() {
           {/* Overall Score Circular Progress */}
           <div className="mb-8 w-24">
             <CircularProgressbar
-              value={generalScore}
-              text={`${generalScore}`}
+              value={getPercentage(data.totalScore)}
+              text={`${getPercentage(data.totalScore)}%`}
               strokeWidth={10}
               styles={buildStyles({
                 textColor: "#111827",
@@ -105,22 +106,23 @@ export default function DMainContent() {
 
           {/* Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.map((item, idx) => {
-              const percent = getPercentage(item.value);
+            {Object.entries(data.scoreBreakdown).map(([key, value], idx) => {
+              const percent = getPercentage(value);
               return (
                 <div
                   key={idx}
-                  className={`p-4 rounded-lg border ${getColorClass(percent)} bg-white shadow-sm`}
+                  className={`p-4 rounded-lg border ${getColorClass(
+                    percent
+                  )} bg-white shadow-sm`}
                 >
                   <div className="flex justify-between items-center mb-2">
-                    <h4 className="font-semibold">{item.title}</h4>
+                    <h4 className="font-semibold">{decodeCamelCase(key)}</h4>
                   </div>
 
-                  {/* Circular Progress */}
                   <div className="w-20 mb-3">
                     <CircularProgressbar
                       value={percent}
-                      text={`${item.value}`}
+                      text={`${value}`}
                       strokeWidth={10}
                       styles={buildStyles({
                         textColor: "#111827",
@@ -131,8 +133,9 @@ export default function DMainContent() {
                     />
                   </div>
 
-                  {/* Description */}
-                  <pre className="text-xs text-gray-600 whitespace-pre-wrap">{item.text}</pre>
+                  <pre className="text-xs text-gray-600 whitespace-pre-wrap">
+                    {decodeCamelCase(key)}
+                  </pre>
                 </div>
               );
             })}
@@ -140,21 +143,25 @@ export default function DMainContent() {
 
           {/* Faults in Profile */}
           <div className="mt-12">
-            <h3 className="text-lg font-semibold text-red-600 mb-2">Detected Faults in Your Profile</h3>
+            <h3 className="text-lg font-semibold text-red-600 mb-2">
+              Detected Faults in Your Profile
+            </h3>
             <ul className="list-disc list-inside text-sm text-red-500 space-y-1">
-              <li>No summary in the "About" section</li>
-              <li>Missing descriptions in 2 past experiences</li>
-              <li>No contact email or website added</li>
+              {data.strengths.map((str, idx) => (
+                <li key={idx}>{str}</li>
+              ))}
             </ul>
           </div>
 
           {/* Suggestions for Improvement */}
           <div className="mt-10">
-            <h3 className="text-lg font-semibold text-blue-600 mb-2">Suggestions to Improve Your Profile</h3>
+            <h3 className="text-lg font-semibold text-blue-600 mb-2">
+              Suggestions to Improve Your Profile
+            </h3>
             <ul className="list-disc list-inside text-sm text-blue-500 space-y-1">
-              <li>Add a featured section to highlight key work</li>
-              <li>Include more quantifiable achievements in experience</li>
-              <li>Update your skills section with at least 5 relevant skills</li>
+              {data.improvements.map((str, idx) => (
+                <li key={idx}>{str}</li>
+              ))}
             </ul>
           </div>
         </>
@@ -172,13 +179,12 @@ export default function DMainContent() {
 
       {activeTab === "Improvised" && (
         <div className="mt-10">
-
           <ProfileHeader />
           <SuggestionsAnalytics />
           <AboutFeatured />
           <Activity />
           <EducationProjects />
-           </div>
+        </div>
       )}
     </section>
   );

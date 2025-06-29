@@ -6,13 +6,13 @@ import Link from "next/link";
 import Image from "next/image";
 
 type Props = {
-  profileUrl: string;
+  profileURL: string;
   isMobile: boolean;
 };
 
-const Sidebar: React.FC<Props> = ({ isMobile, profileUrl }) => {
+const Sidebar: React.FC<Props> = ({ isMobile, profileURL }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editedUrl, setEditedUrl] = useState(profileUrl);
+  const [editedUrl, setEditedUrl] = useState(profileURL);
 
   const handleSave = () => {
     setIsEditing(false);
@@ -39,7 +39,9 @@ const Sidebar: React.FC<Props> = ({ isMobile, profileUrl }) => {
 
       {/* LinkedIn URL Section */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-600 mb-2">LinkedIn Profile URL</h4>
+        <h4 className="text-sm font-semibold text-gray-600 mb-2">
+          LinkedIn Profile URL
+        </h4>
         <div className="flex items-start gap-2 w-full break-all">
           {isEditing ? (
             <>
@@ -70,7 +72,9 @@ const Sidebar: React.FC<Props> = ({ isMobile, profileUrl }) => {
 
       {/* Industry Selection */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-600 mb-2">Select Industry</h4>
+        <h4 className="text-sm font-semibold text-gray-600 mb-2">
+          Select Industry
+        </h4>
         <IndustryChips />
       </div>
 
@@ -78,7 +82,9 @@ const Sidebar: React.FC<Props> = ({ isMobile, profileUrl }) => {
 
       {/* Prompt Section */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-600 mb-2">Ask AI for Suggestions</h4>
+        <h4 className="text-sm font-semibold text-gray-600 mb-2">
+          Ask AI for Suggestions
+        </h4>
         <PromptInput />
       </div>
     </aside>
