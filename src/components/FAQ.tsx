@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown } from "lucide-react"; // 👈 Import the dropdown icon
 
 type FAQItem = {
   question: string;
@@ -57,41 +58,53 @@ const FAQ: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-16 px-4">
-      <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-10">
-        Frequently Asked Questions
-      </h2>
-      <div className="space-y-4">
-        {faqData.map((item, index) => (
-          <div
-            key={index}
-            className="border border-gray-300 rounded-xl bg-white shadow-sm overflow-hidden"
-          >
-            <button
-              onClick={() => toggleFAQ(index)}
-              className="w-full px-6 py-4 text-left flex justify-between items-center"
+    <div
+      id="faq"
+      className="relative z-0 py-16 px-4 bg-gradient-to-br from-blue-50 via-white to-indigo-100"
+    >
+      <div className="max-w-3xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-10">
+          Frequently Asked Questions
+        </h2>
+        <div className="space-y-4">
+          {faqData.map((item, index) => (
+            <motion.div
+              key={index}
+              className="border border-gray-200 rounded-xl bg-white/80 backdrop-blur-sm shadow-md overflow-hidden"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
             >
-              <span className="font-medium text-gray-800">{item.question}</span>
-              <span className="text-blue-600 text-xl">
-                {openIndex === index ? "-" : "+"}
-              </span>
-            </button>
-            <AnimatePresence initial={false}>
-              {openIndex === index && (
+              <button
+                onClick={() => toggleFAQ(index)}
+                className="w-full px-6 py-4 text-left flex justify-between items-center"
+              >
+                <span className="font-medium text-gray-800">{item.question}</span>
                 <motion.div
-                  key="answer"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
+                  animate={{ rotate: openIndex === index ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
-                  className="px-6 pb-4 text-sm text-gray-700"
+                  className="text-blue-600"
                 >
-                  {item.answer}
+                  <ChevronDown size={22} />
                 </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ))}
+              </button>
+              <AnimatePresence initial={false}>
+                {openIndex === index && (
+                  <motion.div
+                    key="answer"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    className="px-6 pb-4 text-sm text-gray-700"
+                  >
+                    {item.answer}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );

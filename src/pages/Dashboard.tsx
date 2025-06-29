@@ -16,6 +16,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   return (
+    <div className="dashboard">
     <div className="flex h-screen w-screen overflow-hidden">
       {/* Sidebar: static for desktop */}
       {!isMobile && (
@@ -51,6 +52,7 @@ const Dashboard: React.FC<DashboardProps> = ({
       <main className="flex-1 overflow-y-auto h-screen">
         <DMainContent />
       </main>
+    </div>
     </div>
   );
 };

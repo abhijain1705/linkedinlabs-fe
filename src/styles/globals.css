@@ -11,9 +11,12 @@
 html,
 body,
 #__next {
+  font-family: "Poppins", sans-serif;
+}
+
+.dashboard {
   height: 100%;
   overflow: hidden;
-  font-family: "Poppins", sans-serif;
 }
 
 /* 🎨 Support Graphics */
@@ -34,9 +37,11 @@ body,
 .btn-primary {
   @apply bg-blue-600 text-white px-4 py-1 rounded-full hover:bg-blue-700 text-sm;
 }
+
 .btn-outline {
   @apply border border-blue-600 text-blue-600 px-4 py-1 rounded-full hover:bg-blue-100 text-sm;
 }
+
 .btn-ghost {
   @apply px-4 py-1 rounded-full text-sm;
 }
