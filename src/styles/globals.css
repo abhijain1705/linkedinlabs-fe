@@ -28,3 +28,15 @@ body,
 .support-top-graphics.support-adjust-graphics {
   top: -9.4rem;
 }
+
+
+/* styles/globals.css */
+.btn-primary {
+  @apply bg-blue-600 text-white px-4 py-1 rounded-full hover:bg-blue-700 text-sm;
+}
+.btn-outline {
+  @apply border border-blue-600 text-blue-600 px-4 py-1 rounded-full hover:bg-blue-100 text-sm;
+}
+.btn-ghost {
+  @apply px-4 py-1 rounded-full text-sm;
+}

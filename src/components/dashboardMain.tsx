@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { FaCircle } from "react-icons/fa";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import ProfileHeader from "./linkedin/ProfileHeader";
+import SuggestionsAnalytics from "./linkedin/SuggestionsAnalytics";
+import AboutFeatured from "./linkedin/AboutFeatured";
+import Activity from "./linkedin/Activity";
+import EducationProjects from "./linkedin/EducationProjects";
 
 const data = [
   {
@@ -53,10 +58,9 @@ export default function DMainContent() {
   const generalScore = 83;
 
   const tabClass = (tab: string) =>
-    `px-4 py-2 rounded-t-md border-b-2 font-medium ${
-      activeTab === tab
-        ? "border-blue-600 text-blue-600"
-        : "border-transparent text-gray-500 hover:text-blue-600"
+    `px-4 py-2 rounded-t-md border-b-2 font-medium ${activeTab === tab
+      ? "border-blue-600 text-blue-600"
+      : "border-transparent text-gray-500 hover:text-blue-600"
     }`;
 
   return (
@@ -157,15 +161,24 @@ export default function DMainContent() {
       )}
 
       {activeTab === "Current" && (
-        <div className="text-gray-600 text-center mt-10">
-          <p>This will render the current LinkedIn profile preview (coming soon).</p>
+        <div className="mt-10">
+          <ProfileHeader />
+          <SuggestionsAnalytics />
+          <AboutFeatured />
+          <Activity />
+          <EducationProjects />
         </div>
       )}
 
       {activeTab === "Improvised" && (
-        <div className="text-gray-600 text-center mt-10">
-          <p>This will render the improved LinkedIn profile with AI suggestions (coming soon).</p>
-        </div>
+        <div className="mt-10">
+
+          <ProfileHeader />
+          <SuggestionsAnalytics />
+          <AboutFeatured />
+          <Activity />
+          <EducationProjects />
+           </div>
       )}
     </section>
   );
