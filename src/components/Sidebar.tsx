@@ -4,6 +4,11 @@ import IndustryChips from "./IndustryChips";
 import PromptInput from "./PromptInput";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import { apiResponseKeyName, profileURLKeyName } from "@/utils";
+import axios from "axios";
+import { CircularProgress } from "@mui/material";
 
 type Props = {
   profileURL: string;
@@ -14,10 +19,34 @@ const Sidebar: React.FC<Props> = ({ isMobile, profileURL }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedUrl, setEditedUrl] = useState(profileURL);
 
-  const handleSave = () => {
-    setIsEditing(false);
-    // Optional: send editedUrl to backend
-    console.log("Saved URL:", editedUrl);
+  const router = useRouter();
+
+  const [loader, setloader] = useState(false);
+
+  const handleSave = async () => {
+    try {
+      setloader(true);
+      const response = await axios.post(
+        "http://localhost:5000/api/analyze/analyzeProfile",
+        {
+          profileUrl: editedUrl,
+        }
+      );
+      toast.success("Profile analyzed successfully!");
+      sessionStorage.setItem(apiResponseKeyName, JSON.stringify(response.data));
+      sessionStorage.setItem(profileURLKeyName, editedUrl);
+      setTimeout(() => {
+        router.reload();
+      }, 2000);
+      // Handle response (e.g., show results or navigate)
+    } catch (error) {
+      toast.error("Failed to analyze profile. Please try again.");
+      console.error("API Error:", error);
+      // Handle error (e.g., show error message)
+    } finally {
+      setIsEditing(false);
+      setloader(false);
+    }
   };
 
   return (
@@ -51,10 +80,16 @@ const Sidebar: React.FC<Props> = ({ isMobile, profileURL }) => {
                 onChange={(e) => setEditedUrl(e.target.value)}
                 className="text-sm border border-gray-300 rounded px-2 py-1 w-full"
               />
-              <FaSave
-                className="cursor-pointer text-green-600 hover:text-green-800 flex-shrink-0 mt-1"
-                onClick={handleSave}
-              />
+              <button disabled={loader}>
+                {loader ? (
+                  <CircularProgress size={"small"} />
+                ) : (
+                  <FaSave
+                    className="cursor-pointer text-green-600 hover:text-green-800 flex-shrink-0 mt-1"
+                    onClick={handleSave}
+                  />
+                )}
+              </button>
             </>
           ) : (
             <>

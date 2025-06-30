@@ -8,6 +8,8 @@ import Activity from "./linkedin/Activity";
 import EducationProjects from "./linkedin/EducationProjects";
 import { AIResponse } from "../types/linkedin";
 import { CircularProgress } from "@mui/material";
+import ExperienceProjects from "./linkedin/ExperienceProjects";
+import OptimizeComponent from "./linkedin/optimizeComponent";
 
 // Convert value like "25/30" → 83.3
 const getPercentage = (valueStr: string): number => {
@@ -169,21 +171,72 @@ export default function DMainContent({
 
       {activeTab === "Current" && (
         <div className="mt-10">
-          <ProfileHeader />
+          <ProfileHeader
+            profile={data.original.profile_photo}
+            post={data.original.headline}
+            location={data.original.location}
+            improvised={false}
+            name={data.original.fullName}
+            banner={data.original.background_cover_image_url}
+          />
           <SuggestionsAnalytics />
-          <AboutFeatured />
+          <AboutFeatured improvised={false} about={data.original.about} />
           <Activity />
-          <EducationProjects />
+          <ExperienceProjects
+            improvised={false}
+            experience={data.original.experience}
+          />
+          <EducationProjects
+            improvised={false}
+            projects={data.original.projects}
+            education={data.original.education}
+          />
+          <OptimizeComponent
+            data={{
+              awards: data.optimizedLinkedinProfile.awards,
+              courses: data.optimizedLinkedinProfile.courses,
+              languages: data.optimizedLinkedinProfile.languages,
+              certifications: data.optimizedLinkedinProfile.certifications,
+              skills: data.optimizedLinkedinProfile.skills,
+            }}
+          />
         </div>
       )}
 
       {activeTab === "Improvised" && (
         <div className="mt-10">
-          <ProfileHeader />
+          <ProfileHeader
+            profile={data.original.profile_photo}
+            post={data.optimizedLinkedinProfile.headline}
+            improvised={true}
+            location={data.original.location}
+            name={data.original.fullName}
+            banner={data.original.background_cover_image_url}
+          />
           <SuggestionsAnalytics />
-          <AboutFeatured />
-          <Activity />
-          <EducationProjects />
+          <AboutFeatured
+            improvised={true}
+            about={data.optimizedLinkedinProfile.about}
+          />
+          {/* <Activity /> */}
+          <ExperienceProjects
+            improvised={true}
+            experience={data.optimizedLinkedinProfile.experience}
+          />
+          <EducationProjects
+            improvised={true}
+            projects={data.optimizedLinkedinProfile.projects}
+            education={data.optimizedLinkedinProfile.education}
+          />
+          <OptimizeComponent
+            data={{
+              awards: data.optimizedLinkedinProfile.awards,
+              courses: data.optimizedLinkedinProfile.courses,
+              languages: data.optimizedLinkedinProfile.languages,
+              certifications: data.optimizedLinkedinProfile.certifications,
+              skills: data.optimizedLinkedinProfile.skills,
+            }}
+          />
         </div>
       )}
     </section>
