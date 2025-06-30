@@ -55,7 +55,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     } catch (err: any) {
       console.error("❌ Dashboard Load Error:", err.message);
       toast.error("Profile analysis is invalid or incomplete.");
-      // router.push("/");
+      router.push("/");
     }
   }, []);
 

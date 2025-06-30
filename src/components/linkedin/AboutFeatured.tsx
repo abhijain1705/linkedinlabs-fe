@@ -1,4 +1,5 @@
 // components/AboutFeatured.tsx
+import { Tooltip } from "@mui/material";
 
 type Props = { about: string; improvised: boolean };
 export default function AboutFeatured({ about, improvised }: Props) {
@@ -9,7 +10,53 @@ export default function AboutFeatured({ about, improvised }: Props) {
     <div className="space-y-4">
       {/* About */}
       <div className="bg-white mt-4 p-4 rounded-lg shadow">
-        <h3 className="text-lg font-semibold">About</h3>
+        <h3 className="text-lg font-semibold">
+          About{" "}
+          {improvised && (
+            <Tooltip title="Copy to Clipboard">
+              <button
+                type="button"
+                className="ml-2 inline-flex items-center text-gray-400 hover:text-green-700"
+                onClick={() => {
+                  navigator.clipboard.writeText(displayAbout);
+                  import("react-toastify").then(({ toast }) =>
+                    toast.success("Copied to clipboard!")
+                  );
+                }}
+                aria-label="Copy to clipboard"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <rect
+                    x="9"
+                    y="9"
+                    width="13"
+                    height="13"
+                    rx="2"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    fill="none"
+                  />
+                  <rect
+                    x="3"
+                    y="3"
+                    width="13"
+                    height="13"
+                    rx="2"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    fill="none"
+                  />
+                </svg>
+              </button>
+            </Tooltip>
+          )}
+        </h3>
         <p
           className={`text-sm ${
             improvised ? "text-green-700" : "text-gray-700"

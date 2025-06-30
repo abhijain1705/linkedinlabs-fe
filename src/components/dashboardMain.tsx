@@ -10,6 +10,7 @@ import { AIResponse } from "../types/linkedin";
 import { CircularProgress } from "@mui/material";
 import ExperienceProjects from "./linkedin/ExperienceProjects";
 import OptimizeComponent from "./linkedin/optimizeComponent";
+import { motion } from "framer-motion";
 
 // Convert value like "25/30" → 83.3
 const getPercentage = (valueStr: string): number => {
@@ -95,8 +96,8 @@ export default function DMainContent({
 
           <div className="mb-8 w-24">
             <CircularProgressbar
-              value={getPercentage(data?.totalScore ?? "0/100")}
-              text={`${getPercentage(data?.totalScore ?? "0/100")}%`}
+              value={getPercentage(`${data.totalScore ?? "0"}/100`)}
+              text={`${data.totalScore ?? "0"}/100`}
               strokeWidth={10}
               styles={buildStyles({
                 textColor: "#111827",
@@ -124,7 +125,7 @@ export default function DMainContent({
                     <div className="w-20 mb-3">
                       <CircularProgressbar
                         value={percent}
-                        text={`${value ?? "0/100"}`}
+                        text={`${value ?? "0"}/${idx === 1 ? 40 : 30}`}
                         strokeWidth={10}
                         styles={buildStyles({
                           textColor: "#111827",
@@ -202,6 +203,7 @@ export default function DMainContent({
             education={data.original.education}
           />
           <OptimizeComponent
+            improvised={false}
             data={{
               awards: data.original.awards,
               courses: data.original.courses,
@@ -213,6 +215,15 @@ export default function DMainContent({
 
       {activeTab === "Improvised" && (
         <div className="mt-10">
+          <motion.p
+            className="my-2 text-center text-green-800 font-semibold"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            transition={{ duration: 0.4, type: "spring" }}
+          >
+            Your chances to get hired is increased by {data.chancesToGetHired}%
+          </motion.p>
           <ProfileHeader
             profile={data.original.profile_photo}
             post={data.optimizedLinkedinProfile.headline}
@@ -237,6 +248,7 @@ export default function DMainContent({
             education={data.optimizedLinkedinProfile.education}
           />
           <OptimizeComponent
+            improvised={true}
             data={{
               awards: data.optimizedLinkedinProfile.awards,
               courses: data.optimizedLinkedinProfile.courses,

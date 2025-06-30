@@ -5,6 +5,21 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { apiResponseKeyName, profileURLKeyName } from "@/utils";
 import { useAnimation, motion } from "framer-motion";
+import { AIResponse } from "@/types/linkedin";
+import { AnimatePresence, motion as m } from "framer-motion";
+
+const successQuotes = [
+  "Success is not the key to happiness. Happiness is the key to success. – Albert Schweitzer",
+  "Success is walking from failure to failure with no loss of enthusiasm. – Winston Churchill",
+  "The only place where success comes before work is in the dictionary. – Vidal Sassoon",
+  "Success usually comes to those who are too busy to be looking for it. – Henry David Thoreau",
+  "Don’t be afraid to give up the good to go for the great. – John D. Rockefeller",
+  "Opportunities don't happen. You create them. – Chris Grosser",
+  "Success is not in what you have, but who you are. – Bo Bennett",
+  "The road to success and the road to failure are almost exactly the same. – Colin R. Davis",
+  "Success is not how high you have climbed, but how you make a positive difference to the world. – Roy T. Bennett",
+  "Success isn’t just about what you accomplish in your life; it’s about what you inspire others to do. – Anonymous",
+];
 
 type FormValues = {
   profileUrl: string;
@@ -20,6 +35,43 @@ const Hero: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>();
+
+  const [profileURL, setprofileURL] = useState("");
+  const [aiResponse, setaiResponse] = useState<AIResponse | null>(null);
+
+  useEffect(() => {
+    const url = sessionStorage.getItem(profileURLKeyName);
+    const jsonData = sessionStorage.getItem(apiResponseKeyName);
+
+    if (!url || !jsonData) {
+      toast.error("No data found. Please analyze your profile again.");
+      router.push("/");
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(jsonData);
+
+      // Check for score or if all fields are empty
+      const score = parsed?.data?.totalScore || "";
+      const isEmpty =
+        !score ||
+        score.startsWith("0") ||
+        Object.values(parsed.data.optimizedLinkedinProfile || {}).every(
+          (v) => v === "" || (Array.isArray(v) && v.length === 0)
+        );
+
+      if (isEmpty) {
+        throw new Error("Empty or incomplete profile analysis.");
+      }
+
+      setprofileURL(url);
+      setaiResponse(parsed);
+    } catch (err: any) {
+      console.error("❌ Dashboard Load Error:", err.message);
+      toast.error("Profile analysis is invalid or incomplete.");
+    }
+  }, []);
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -89,6 +141,27 @@ const Hero: React.FC = () => {
 
   const controls = useAnimation();
 
+  const [quoteIdx, setQuoteIdx] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+
+  useEffect(() => {
+    if (!loader) return;
+    setDisplayed("");
+    let charIdx = 0;
+    const quote = successQuotes[quoteIdx];
+    const typeInterval = setInterval(() => {
+      setDisplayed((prev) => prev + quote[charIdx]);
+      charIdx++;
+      if (charIdx >= quote.length) {
+        clearInterval(typeInterval);
+        setTimeout(() => {
+          setQuoteIdx((prev) => (prev + 1) % successQuotes.length);
+        }, 2000);
+      }
+    }, 30);
+    return () => clearInterval(typeInterval);
+  }, [quoteIdx, loader]);
+
   useEffect(() => {
     controls.start({
       d: [
@@ -132,6 +205,33 @@ const Hero: React.FC = () => {
           profile
         </p>
 
+        {loader && (
+          <div>
+            <p>Read Quotes while we are fetching data for you</p>
+
+            <AnimatePresence mode="wait">
+              <m.p
+                key={quoteIdx}
+                className="text-blue-700 font-semibold text-lg mt-2 min-h-[60px]"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4 }}
+              >
+                {displayed}
+                <span className="animate-pulse">|</span>
+              </m.p>
+            </AnimatePresence>
+          </div>
+        )}
+        {profileURL && aiResponse && (
+          <div>
+            <p>Edit Saved Profile</p>
+            <a className="text-blue-500 underline" href={"/Dashboard"}>
+              {profileURL}
+            </a>
+          </div>
+        )}
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col sm:flex-row items-center gap-4 justify-center mt-8"

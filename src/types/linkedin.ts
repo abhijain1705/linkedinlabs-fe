@@ -117,6 +117,7 @@ export interface OriginalProfile {
 
 export interface LinkedInAnalysisData {
   totalScore: string;
+  chancesToGetHired: string;
   scoreBreakdown: ScoreBreakdown;
   strengths: string[];
   improvements: string[];

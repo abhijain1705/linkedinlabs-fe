@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { useRouter } from "next/router";
@@ -43,13 +44,12 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
 
       {/* Center Links */}
       <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700">
-        <a href="#faq" className="hover:text-black transition">
+        <a href="/#faq" className="hover:text-black transition">
           FAQ
         </a>
-        <a href="#features" className="hover:text-black transition">
+        <a href="/#features" className="hover:text-black transition">
           Features
         </a>
-        
       </nav>
 
       {/* CTA Button */}

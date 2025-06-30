@@ -1,7 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-type Props = { data?: Record<string, any> };
+import { Tooltip } from "@mui/material";
 
-export default function OptimizeComponent({ data }: Props) {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type Props = { data?: Record<string, any>; improvised: boolean };
+
+export default function OptimizeComponent({ improvised, data }: Props) {
   if (!data || Object.keys(data).length === 0) {
     return (
       <div className="bg-white p-4 rounded-lg shadow mt-4">
@@ -15,7 +17,53 @@ export default function OptimizeComponent({ data }: Props) {
       {Object.entries(data).map(([key, value], idx) => (
         <div key={idx} className="bg-white p-4 rounded-lg shadow mt-4">
           <div className="flex flex-col">
-            <h3 className="text-lg font-semibold capitalize mb-2">{key}</h3>
+            <h3 className="text-lg font-semibold capitalize mb-2">
+              {key}{" "}
+              {improvised && Array.isArray(value) && value.length > 0 && (
+                <Tooltip title="Copy to Clipboard">
+                  <button
+                    type="button"
+                    className="ml-2 inline-flex items-center text-gray-400 hover:text-green-700"
+                    onClick={() => {
+                      navigator.clipboard.writeText(JSON.stringify(value));
+                      import("react-toastify").then(({ toast }) =>
+                        toast.success("Copied to clipboard!")
+                      );
+                    }}
+                    aria-label="Copy to clipboard"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <rect
+                        x="9"
+                        y="9"
+                        width="13"
+                        height="13"
+                        rx="2"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        fill="none"
+                      />
+                      <rect
+                        x="3"
+                        y="3"
+                        width="13"
+                        height="13"
+                        rx="2"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        fill="none"
+                      />
+                    </svg>
+                  </button>
+                </Tooltip>
+              )}
+            </h3>
 
             {/* Handle arrays */}
             {Array.isArray(value) && value.length > 0 ? (
@@ -23,7 +71,12 @@ export default function OptimizeComponent({ data }: Props) {
                 // If it's a string (e.g., skill or language)
                 if (typeof item === "string" || typeof item === "number") {
                   return (
-                    <p key={i} className="text-gray-700 ml-2">
+                    <p
+                      key={i}
+                      className={`${
+                        improvised ? "text-green-500" : "text-gray-500"
+                      } ml-2`}
+                    >
                       • {item}
                     </p>
                   );
@@ -42,22 +95,38 @@ export default function OptimizeComponent({ data }: Props) {
                         <p className="text-md font-medium">{item.role}</p>
                       )}
                       {item.organization && (
-                        <p className="text-sm text-gray-600">
+                        <p
+                          className={`text-sm ${
+                            improvised ? "text-green-500" : "text-gray-500"
+                          }`}
+                        >
                           {item.organization}
                         </p>
                       )}
                       {item.institution && (
-                        <p className="text-sm text-gray-600">
+                        <p
+                          className={`text-sm ${
+                            improvised ? "text-green-500" : "text-gray-500"
+                          }`}
+                        >
                           {item.institution}
                         </p>
                       )}
                       {item.issuer && (
-                        <p className="text-sm text-gray-600">
+                        <p
+                          className={`text-sm ${
+                            improvised ? "text-green-500" : "text-gray-500"
+                          }`}
+                        >
                           Issued by {item.issuer}
                         </p>
                       )}
                       {item.description && (
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p
+                          className={`text-sm ${
+                            improvised ? "text-green-500" : "text-gray-500"
+                          } mt-1`}
+                        >
                           {item.description}
                         </p>
                       )}
