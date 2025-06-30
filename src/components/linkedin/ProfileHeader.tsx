@@ -21,19 +21,19 @@ export default function ProfileHeader({
   location,
 }: Props) {
   // If any required data is missing, show fallback
-  if (!banner || !profile || !name || !post || !location) {
-    return (
-      <div className="bg-white mb-4 rounded-lg shadow-md overflow-hidden flex items-center justify-center h-40">
-        <span className="text-gray-500 text-lg">No Data</span>
-      </div>
-    );
-  }
+  // if (!banner || !profile || !name || !post || !location) {
+  //   return (
+  //     <div className="bg-white mb-4 rounded-lg shadow-md overflow-hidden flex items-center justify-center h-40">
+  //       <span className="text-gray-500 text-lg">No Data</span>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="bg-white mb-4 rounded-lg shadow-md overflow-hidden">
       <div className="relative">
         <img
-          src={banner}
+          src={banner ?? ""}
           alt="Banner"
           width={1200}
           height={300}
@@ -41,7 +41,7 @@ export default function ProfileHeader({
         />
         <div className="absolute left-4 -bottom-12">
           <img
-            src={profile}
+            src={profile ?? ""}
             alt="Profile"
             width={96}
             height={96}
@@ -53,20 +53,20 @@ export default function ProfileHeader({
       <div className="pt-16 px-4 pb-4">
         <div className="flex justify-between items-start">
           <div>
-            <h2 className="text-xl font-bold">{name}</h2>
+            <h2 className="text-xl font-bold">{name ?? "N/a"}</h2>
             <p
               className={`text-sm ${
                 improvised ? "text-green-600" : "text-gray-600"
               }`}
             >
-              {post}{" "}
+              {post ?? "N/a"}{" "}
               {improvised && (
                 <Tooltip title="Copy to Clipboard">
                   <button
                     type="button"
                     className="ml-2 inline-flex items-center text-gray-400 hover:text-green-700"
                     onClick={() => {
-                      navigator.clipboard.writeText(post);
+                      navigator.clipboard.writeText(post ?? "N/a");
                       import("react-toastify").then(({ toast }) =>
                         toast.success("Copied to clipboard!")
                       );
@@ -106,7 +106,8 @@ export default function ProfileHeader({
               )}
             </p>
             <p className="text-sm text-gray-500">
-              {location} · <a className="text-blue-600">Contact info</a>
+              {location ?? "N/a"} ·{" "}
+              <a className="text-blue-600">Contact info</a>
             </p>
           </div>
         </div>
