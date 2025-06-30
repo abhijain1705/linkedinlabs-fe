@@ -193,11 +193,9 @@ export default function DMainContent({
           />
           <OptimizeComponent
             data={{
-              awards: data.optimizedLinkedinProfile.awards,
-              courses: data.optimizedLinkedinProfile.courses,
-              languages: data.optimizedLinkedinProfile.languages,
-              certifications: data.optimizedLinkedinProfile.certifications,
-              skills: data.optimizedLinkedinProfile.skills,
+              awards: data.original.awards,
+              courses: data.original.courses,
+              languages: data.original.languages,
             }}
           />
         </div>
