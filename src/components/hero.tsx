@@ -143,38 +143,38 @@ const Hero: React.FC = () => {
   const [displayed, setDisplayed] = useState("");
 
   useEffect(() => {
-  // if (!loader) return;
+    // if (!loader) return;
 
     const quote = successQuotes[quoteIdx];
+    let charIdx = 0;
+    let intervalId: any;
+    let typingStarted = false;
 
-  let charIdx = 0;
-  let intervalId:any;
+    // Reset displayed correctly before typing starts
+    setDisplayed(quote[0]);
 
-  // Ensure displayed is cleared before typing starts
-  setDisplayed(""); 
+    const startTyping = setTimeout(() => {
+      typingStarted = true;
+      intervalId = setInterval(() => {
+        if (charIdx < quote.length-1) {
+          setDisplayed((prev) => prev + quote[charIdx]);
+          charIdx++;
+        } else {
+          clearInterval(intervalId);
+          setTimeout(() => {
+            setQuoteIdx((prev) => (prev + 1) % successQuotes.length);
+          }, 2000);
+        }
+      }, 30);
+    }, 20); // delay ensures `setDisplayed("")` is rendered
 
-  // Small delay to allow `setDisplayed` to complete before typing starts
-  const startTyping = setTimeout(() => {
-    intervalId = setInterval(() => {
-      if (charIdx < quote.length) {
-        setDisplayed((prev) => prev + quote[charIdx]);
-        charIdx++;
-      } else {
-        clearInterval(intervalId);
-        setTimeout(() => {
-          setQuoteIdx((prev) => (prev) % successQuotes.length-1);
-        }, 2000);
-      }
-    }, 30);
-  }, 10); // slight delay ensures `""` is committed
+    return () => {
+      clearTimeout(startTyping);
+      if (typingStarted) clearInterval(intervalId);
+    };
+  }, [quoteIdx, loader]);
 
-  return () => {
-    clearTimeout(startTyping);
-    clearInterval(intervalId);
-  };
-}, [quoteIdx, loader]);
 
-  
   useEffect(() => {
     controls.start({
       d: [
@@ -219,23 +219,23 @@ const Hero: React.FC = () => {
         </p>
 
         {/* {loader && ( */}
-          <div>
-            <p>Read Quotes while we are fetching data for you</p>
+        <div>
+          <p>Read Quotes while we are fetching data for you</p>
 
-            <AnimatePresence mode="wait">
-              <m.p
-                key={quoteIdx}
-                className="text-blue-700 font-semibold text-lg mt-2 min-h-[60px]"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.4 }}
-              >
-                {displayed}
-                <span className="animate-pulse">|</span>
-              </m.p>
-            </AnimatePresence>
-          </div>
+          <AnimatePresence mode="wait">
+            <m.p
+              key={quoteIdx}
+              className="text-blue-700 font-semibold text-lg mt-2 min-h-[60px]"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.4 }}
+            >
+              {displayed}
+              <span className="animate-pulse">|</span>
+            </m.p>
+          </AnimatePresence>
+        </div>
         {/* )} */}
         <h4 className="font-bold text-red-500">
           Scan 5 profiles completely for free
@@ -263,9 +263,8 @@ const Hero: React.FC = () => {
                 message: "Enter a valid LinkedIn profile URL",
               },
             })}
-            className={`px-4 py-3 border ${
-              errors.profileUrl ? "border-red-500" : "border-black"
-            } rounded-md shadow-[3px_3px_0_0_#000] focus:outline-none focus:ring-2 focus:ring-black`}
+            className={`px-4 py-3 border ${errors.profileUrl ? "border-red-500" : "border-black"
+              } rounded-md shadow-[3px_3px_0_0_#000] focus:outline-none focus:ring-2 focus:ring-black`}
           />
 
           <button
