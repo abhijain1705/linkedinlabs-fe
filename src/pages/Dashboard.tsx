@@ -36,12 +36,12 @@ const Dashboard: React.FC<DashboardProps> = ({
 
     try {
       const parsed = JSON.parse(jsonData);
-
+      console.log(parsed, "mvrerwmlvlqem");
       // Check for score or if all fields are empty
       const score = parsed?.data?.totalScore || "";
       const isEmpty =
         !score ||
-        score.startsWith("0") ||
+        (score ?? "").toString().startsWith("0") ||
         Object.values(parsed.data.optimizedLinkedinProfile || {}).every(
           (v) => v === "" || (Array.isArray(v) && v.length === 0)
         );
@@ -55,7 +55,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     } catch (err: any) {
       console.error("❌ Dashboard Load Error:", err.message);
       toast.error("Profile analysis is invalid or incomplete.");
-      router.push("/");
+      // router.push("/");
     }
   }, []);
 

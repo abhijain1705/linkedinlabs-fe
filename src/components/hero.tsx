@@ -56,7 +56,7 @@ const Hero: React.FC = () => {
       const score = parsed?.data?.totalScore || "";
       const isEmpty =
         !score ||
-        score.startsWith("0") ||
+        (score ?? "").toString().startsWith("0") ||
         Object.values(parsed.data.optimizedLinkedinProfile || {}).every(
           (v) => v === "" || (Array.isArray(v) && v.length === 0)
         );
@@ -224,6 +224,9 @@ const Hero: React.FC = () => {
             </AnimatePresence>
           </div>
         )}
+        <h4 className="font-bold text-red-500">
+          Scan 5 profiles completely for free
+        </h4>
         {profileURL && aiResponse && (
           <div>
             <p>Edit Saved Profile</p>

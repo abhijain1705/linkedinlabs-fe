@@ -14,8 +14,12 @@ import { motion } from "framer-motion";
 
 // Convert value like "25/30" → 83.3
 const getPercentage = (valueStr: string): number => {
-  const [num, total] = valueStr.split("/").map(Number);
-  return Math.round((num / total) * 100);
+  if (valueStr.toString().includes("/")) {
+    const [num, total] = valueStr.split("/").map(Number);
+    return Math.round((num / total) * 100);
+  } else {
+    return Number(valueStr) ?? 0;
+  }
 };
 
 const decodeCamelCase = (word: string) => {
@@ -96,8 +100,8 @@ export default function DMainContent({
 
           <div className="mb-8 w-24">
             <CircularProgressbar
-              value={getPercentage(`${data.totalScore ?? "0"}/100`)}
-              text={`${data.totalScore ?? "0"}/100`}
+              value={getPercentage(`${data.totalScore ?? "0"}`)}
+              text={`${data.totalScore ?? "0"}`}
               strokeWidth={10}
               styles={buildStyles({
                 textColor: "#111827",
@@ -125,7 +129,7 @@ export default function DMainContent({
                     <div className="w-20 mb-3">
                       <CircularProgressbar
                         value={percent}
-                        text={`${value ?? "0"}/${idx === 1 ? 40 : 30}`}
+                        text={`${value ?? "0"}`}
                         strokeWidth={10}
                         styles={buildStyles({
                           textColor: "#111827",
