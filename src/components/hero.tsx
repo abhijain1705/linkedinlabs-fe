@@ -143,23 +143,38 @@ const Hero: React.FC = () => {
   const [displayed, setDisplayed] = useState("");
 
   useEffect(() => {
-    if (!loader) return;
-    setDisplayed("");
-    let charIdx = 0;
+  // if (!loader) return;
+
     const quote = successQuotes[quoteIdx];
-    const typeInterval = setInterval(() => {
-      setDisplayed((prev) => prev + quote[charIdx]);
-      charIdx++;
-      if (charIdx >= quote.length) {
-        clearInterval(typeInterval);
+
+  let charIdx = 0;
+  let intervalId:any;
+
+  // Ensure displayed is cleared before typing starts
+  setDisplayed(""); 
+
+  // Small delay to allow `setDisplayed` to complete before typing starts
+  const startTyping = setTimeout(() => {
+    intervalId = setInterval(() => {
+      if (charIdx < quote.length) {
+        setDisplayed((prev) => prev + quote[charIdx]);
+        charIdx++;
+      } else {
+        clearInterval(intervalId);
         setTimeout(() => {
-          setQuoteIdx((prev) => (prev + 1) % successQuotes.length);
+          setQuoteIdx((prev) => (prev) % successQuotes.length-1);
         }, 2000);
       }
     }, 30);
-    return () => clearInterval(typeInterval);
-  }, [quoteIdx, loader]);
+  }, 10); // slight delay ensures `""` is committed
 
+  return () => {
+    clearTimeout(startTyping);
+    clearInterval(intervalId);
+  };
+}, [quoteIdx, loader]);
+
+  
   useEffect(() => {
     controls.start({
       d: [
@@ -203,7 +218,7 @@ const Hero: React.FC = () => {
           profile
         </p>
 
-        {loader && (
+        {/* {loader && ( */}
           <div>
             <p>Read Quotes while we are fetching data for you</p>
 
@@ -221,7 +236,7 @@ const Hero: React.FC = () => {
               </m.p>
             </AnimatePresence>
           </div>
-        )}
+        {/* )} */}
         <h4 className="font-bold text-red-500">
           Scan 5 profiles completely for free
         </h4>

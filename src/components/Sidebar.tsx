@@ -149,6 +149,7 @@ const Sidebar: React.FC<Props> = ({ isMobile, aiResponse, profileURL }) => {
         </h4>
         <IndustryChips
           userIndustry={userIndustry}
+          setprompt={setprompt}
           setuserIndustry={setuserIndustry}
         />
       </div>
