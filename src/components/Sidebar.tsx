@@ -24,29 +24,29 @@ const Sidebar: React.FC<Props> = ({ isMobile, profileURL }) => {
   const [loader, setloader] = useState(false);
 
   const handleSave = async () => {
-    try {
-      setloader(true);
-      const response = await axios.post(
-        "http://localhost:5000/api/analyze/analyzeProfile",
-        {
-          profileUrl: editedUrl,
-        }
-      );
-      toast.success("Profile analyzed successfully!");
-      sessionStorage.setItem(apiResponseKeyName, JSON.stringify(response.data));
-      sessionStorage.setItem(profileURLKeyName, editedUrl);
-      setTimeout(() => {
-        router.reload();
-      }, 2000);
-      // Handle response (e.g., show results or navigate)
-    } catch (error) {
-      toast.error("Failed to analyze profile. Please try again.");
-      console.error("API Error:", error);
-      // Handle error (e.g., show error message)
-    } finally {
-      setIsEditing(false);
-      setloader(false);
-    }
+    // try {
+    //   setloader(true);
+    //   const response = await axios.post(
+    //     "http://localhost:5000/api/analyze/analyzeProfile",
+    //     {
+    //       profileUrl: editedUrl,
+    //     }
+    //   );
+    //   toast.success("Profile analyzed successfully!");
+    //   sessionStorage.setItem(apiResponseKeyName, JSON.stringify(response.data));
+    //   sessionStorage.setItem(profileURLKeyName, editedUrl);
+    //   setTimeout(() => {
+    //     router.reload();
+    //   }, 2000);
+    //   // Handle response (e.g., show results or navigate)
+    // } catch (error) {
+    //   toast.error("Failed to analyze profile. Please try again.");
+    //   console.error("API Error:", error);
+    //   // Handle error (e.g., show error message)
+    // } finally {
+    //   setIsEditing(false);
+    //   setloader(false);
+    // }
   };
 
   return (

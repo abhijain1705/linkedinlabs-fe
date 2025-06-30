@@ -59,15 +59,14 @@ const Hero: React.FC = () => {
         return;
       }
 
-      const responseData = json?.data;
-
+      const responseData = json.data;
       if (!responseData) {
         toast.error("Invalid response format from server.");
         return;
       }
 
       toast.success("Profile analyzed successfully!");
-      sessionStorage.setItem(apiResponseKeyName, JSON.stringify(responseData));
+      sessionStorage.setItem(apiResponseKeyName, JSON.stringify({data: responseData}));
       sessionStorage.setItem(profileURLKeyName, data.profileUrl);
 
       setTimeout(() => {

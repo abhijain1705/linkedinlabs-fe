@@ -40,17 +40,10 @@ const Dashboard: React.FC<DashboardProps> = ({
 
     try {
       const parsed = JSON.parse(jsonData);
-      const content = parsed?.data?.choices?.[0]?.message?.content;
-
-      if (!content || typeof content !== "string") {
-        throw new Error("Missing profile analysis content");
-      }
-
-      const parsedContent = JSON.parse(content);
-
+    
       // Check for score or if all fields are empty
-      const score = parsedContent?.totalScore || "";
-      const isEmpty = !score || score.startsWith("0") || Object.values(parsedContent.optimizedLinkedinProfile || {}).every(
+      const score = parsed?.data?.totalScore || "";
+      const isEmpty = !score || score.startsWith("0") || Object.values(parsed.data.optimizedLinkedinProfile || {}).every(
         (v) => v === "" || (Array.isArray(v) && v.length === 0)
       );
 
@@ -59,11 +52,11 @@ const Dashboard: React.FC<DashboardProps> = ({
       }
 
       setprofileURL(url);
-      setaiResponse(parsedContent);
+      setaiResponse(parsed);
     } catch (err: any) {
       console.error("❌ Dashboard Load Error:", err.message);
       toast.error("Profile analysis is invalid or incomplete.");
-      router.push("/");
+      // router.push("/");
     }
   }, []);
 
