@@ -72,13 +72,13 @@ const Hero: React.FC = () => {
       toast.error("Profile analysis is invalid or incomplete.");
     }
   }, []);
-
+w
   const onSubmit = async (data: FormValues) => {
     try {
       setloader(true);
 
       const res = await fetch(
-        "http://localhost:5000/api/analyze/analyzeProfile",
+        "linkedinlabs-be-production.up.railway.app/api/analyze/analyzeProfile",
         {
           method: "POST",
           headers: {
