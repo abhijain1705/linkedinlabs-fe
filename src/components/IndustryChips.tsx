@@ -13,16 +13,24 @@ const industries = [
   "E-commerce",
   "SaaS & B2B",
   "Startups & Entrepreneurship",
-  "Nonprofits & NGOs"
+  "Nonprofits & NGOs",
 ];
 
-const IndustryChips: React.FC = () => {
+type Props = {
+  setuserIndustry: React.Dispatch<React.SetStateAction<string>>;
+  userIndustry: string;
+};
+
+const IndustryChips: React.FC<Props> = ({ setuserIndustry, userIndustry }) => {
   return (
     <div className="flex flex-wrap gap-2">
       {industries.map((industry) => (
         <span
           key={industry}
-          className="px-3 py-1 bg-gray-200 text-sm rounded-full cursor-pointer hover:bg-black hover:text-white transition"
+          onClick={() => setuserIndustry(industry)}
+          className={`px-3 py-1 bg-gray-200 text-sm rounded-full cursor-pointer hover:bg-black hover:text-white transition ${
+            industry === userIndustry ? "bg-black text-white" : ""
+          }`}
         >
           {industry}
         </span>

@@ -1,12 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Sidebar from "@/components/Sidebar";
 import DMainContent from "@/components/dashboardMain";
 import { useEffect, useState } from "react";
-import {
-  useTheme,
-  useMediaQuery,
-  Drawer,
-  CircularProgress,
-} from "@mui/material";
+import { useTheme, useMediaQuery, Drawer } from "@mui/material";
 import { apiResponseKeyName, profileURLKeyName } from "@/utils";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
@@ -40,12 +36,15 @@ const Dashboard: React.FC<DashboardProps> = ({
 
     try {
       const parsed = JSON.parse(jsonData);
-    
+
       // Check for score or if all fields are empty
       const score = parsed?.data?.totalScore || "";
-      const isEmpty = !score || score.startsWith("0") || Object.values(parsed.data.optimizedLinkedinProfile || {}).every(
-        (v) => v === "" || (Array.isArray(v) && v.length === 0)
-      );
+      const isEmpty =
+        !score ||
+        score.startsWith("0") ||
+        Object.values(parsed.data.optimizedLinkedinProfile || {}).every(
+          (v) => v === "" || (Array.isArray(v) && v.length === 0)
+        );
 
       if (isEmpty) {
         throw new Error("Empty or incomplete profile analysis.");
@@ -66,7 +65,13 @@ const Dashboard: React.FC<DashboardProps> = ({
         {/* Sidebar: static for desktop */}
         {!isMobile && (
           <div className="w-72 flex-shrink-0 border-r border-gray-200">
-            <Sidebar isMobile={isMobile} profileURL={profileURL} />
+            {aiResponse && (
+              <Sidebar
+                aiResponse={aiResponse}
+                isMobile={isMobile}
+                profileURL={profileURL}
+              />
+            )}
           </div>
         )}
 
@@ -88,7 +93,13 @@ const Dashboard: React.FC<DashboardProps> = ({
                 },
               }}
             >
-              <Sidebar isMobile={isMobile} profileURL={profileURL} />
+              {aiResponse && (
+                <Sidebar
+                  aiResponse={aiResponse}
+                  isMobile={isMobile}
+                  profileURL={profileURL}
+                />
+              )}
             </Drawer>
           </div>
         )}
