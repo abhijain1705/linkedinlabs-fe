@@ -3,9 +3,9 @@
 import { Education, Project } from "@/types/linkedin";
 
 type Props = {
-  education: Education[];
-  projects: Project[];
-  improvised: boolean;
+  education?: Education[];
+  projects?: Project[];
+  improvised?: boolean;
 };
 
 export default function EducationProjects({ projects, education }: Props) {
@@ -14,29 +14,37 @@ export default function EducationProjects({ projects, education }: Props) {
       {/* Education */}
       <div className="bg-white p-4 mt-4 rounded-lg shadow">
         <h3 className="text-lg font-semibold">Education</h3>
-        {education.map((edu, ind) => (
-          <div key={ind} className="mt-2 space-y-3 text-sm">
-            <div>
-              <p className="font-semibold">{edu.institution_name}</p>
-              <p>
-                {edu.degree} {"(" + edu.duration + ")"}
-              </p>
-              <p className="text-gray-500">{edu.field_of_study}</p>
+        {education && education.length > 0 ? (
+          education.map((edu, ind) => (
+            <div key={ind} className="mt-2 space-y-3 text-sm">
+              <div>
+                <p className="font-semibold">{edu.institution_name}</p>
+                <p>
+                  {edu.degree} {"(" + edu.duration + ")"}
+                </p>
+                <p className="text-gray-500">{edu.field_of_study}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="text-gray-500 mt-2">No Data</p>
+        )}
       </div>
 
       {/* Projects */}
       <div className="bg-white p-4 rounded-lg shadow">
         <h3 className="text-lg font-semibold">Projects</h3>
         <div className="mt-2 space-y-4 text-sm">
-          {projects.map((prj, idx) => (
-            <div key={idx}>
-              <p className="font-semibold">{prj.title}</p>
-              <p>{prj.description}</p>
-            </div>
-          ))}
+          {projects && projects.length > 0 ? (
+            projects.map((prj, idx) => (
+              <div key={idx}>
+                <p className="font-semibold">{prj.title}</p>
+                <p>{prj.description}</p>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500">No Data</p>
+          )}
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { apiResponseKeyName, profileURLKeyName } from "@/utils";
@@ -25,13 +25,16 @@ const Hero: React.FC = () => {
     try {
       setloader(true);
 
-      const res = await fetch("http://localhost:5000/api/analyze/analyzeProfile", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ profileUrl: data.profileUrl }),
-      });
+      const res = await fetch(
+        "http://localhost:5000/api/analyze/analyzeProfile",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ profileUrl: data.profileUrl }),
+        }
+      );
 
       let errorMessage = "Server error";
 
@@ -41,7 +44,8 @@ const Hero: React.FC = () => {
           if (errorData?.error) {
             errorMessage = errorData.error;
           }
-        } catch (_) {
+        } catch (er) {
+          console.log(er);
           // JSON parse failed, keep default message
         }
 
@@ -66,13 +70,15 @@ const Hero: React.FC = () => {
       }
 
       toast.success("Profile analyzed successfully!");
-      sessionStorage.setItem(apiResponseKeyName, JSON.stringify({data: responseData}));
+      sessionStorage.setItem(
+        apiResponseKeyName,
+        JSON.stringify({ data: responseData })
+      );
       sessionStorage.setItem(profileURLKeyName, data.profileUrl);
 
       setTimeout(() => {
         router.push("/Dashboard");
       }, 2000);
-
     } catch (error: any) {
       toast.error(`Unexpected error: ${error.message || "Unknown"}`);
       console.error("⚠️ Unexpected Fetch Error:", error);
@@ -80,7 +86,6 @@ const Hero: React.FC = () => {
       setloader(false);
     }
   };
-
 
   const controls = useAnimation();
 
@@ -142,8 +147,9 @@ const Hero: React.FC = () => {
                 message: "Enter a valid LinkedIn profile URL",
               },
             })}
-            className={`px-4 py-3 border ${errors.profileUrl ? "border-red-500" : "border-black"
-              } rounded-md shadow-[3px_3px_0_0_#000] focus:outline-none focus:ring-2 focus:ring-black`}
+            className={`px-4 py-3 border ${
+              errors.profileUrl ? "border-red-500" : "border-black"
+            } rounded-md shadow-[3px_3px_0_0_#000] focus:outline-none focus:ring-2 focus:ring-black`}
           />
 
           <button

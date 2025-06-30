@@ -1,8 +1,10 @@
 // components/AboutFeatured.tsx
 
 type Props = { about: string; improvised: boolean };
-
 export default function AboutFeatured({ about, improvised }: Props) {
+  // Fallback if about is missing or empty
+  const displayAbout = about && about.trim().length > 0 ? about : "No Data";
+
   return (
     <div className="space-y-4">
       {/* About */}
@@ -13,7 +15,7 @@ export default function AboutFeatured({ about, improvised }: Props) {
             improvised ? "text-green-700" : "text-gray-700"
           } mt-1`}
         >
-          {about}
+          {displayAbout}
         </p>
       </div>
 

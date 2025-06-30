@@ -5,10 +5,19 @@ import { Experience } from "@/types/linkedin";
 
 type Props = {
   improvised: boolean;
-  experience: Experience[];
+  experience?: Experience[]; // Make experience optional
 };
 
 export default function ExperienceProjects({ experience, improvised }: Props) {
+  if (!experience || experience.length === 0) {
+    return (
+      <div className="bg-white p-4 mt-4 rounded-lg shadow">
+        <h3 className="text-lg font-semibold">Experience</h3>
+        <p className="text-gray-500">No Data</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       {/* Education */}

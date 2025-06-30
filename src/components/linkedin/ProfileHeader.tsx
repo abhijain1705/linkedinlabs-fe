@@ -2,12 +2,12 @@
 // components/ProfileHeader.tsx
 
 type Props = {
-  banner: string;
-  profile: string;
-  name: string;
-  post: string;
-  improvised: boolean;
-  location: string;
+  banner?: string;
+  profile?: string;
+  name?: string;
+  post?: string;
+  improvised?: boolean;
+  location?: string;
 };
 
 export default function ProfileHeader({
@@ -18,6 +18,15 @@ export default function ProfileHeader({
   improvised,
   location,
 }: Props) {
+  // If any required data is missing, show fallback
+  if (!banner || !profile || !name || !post || !location) {
+    return (
+      <div className="bg-white mb-4 rounded-lg shadow-md overflow-hidden flex items-center justify-center h-40">
+        <span className="text-gray-500 text-lg">No Data</span>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white mb-4 rounded-lg shadow-md overflow-hidden">
       <div className="relative">

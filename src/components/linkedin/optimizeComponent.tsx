@@ -1,7 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-type Props = { data: Record<string, any> };
+type Props = { data?: Record<string, any> };
 
 export default function OptimizeComponent({ data }: Props) {
+  if (!data || Object.keys(data).length === 0) {
+    return (
+      <div className="bg-white p-4 rounded-lg shadow mt-4">
+        <p className="text-gray-500 italic">No Data</p>
+      </div>
+    );
+  }
+
   return (
     <>
       {Object.entries(data).map(([key, value], idx) => (

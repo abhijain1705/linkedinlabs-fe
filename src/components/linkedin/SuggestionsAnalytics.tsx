@@ -5,9 +5,12 @@ export default function SuggestionsAnalytics() {
       {/* Suggested for you */}
       <div className="bg-white p-4 rounded-lg shadow">
         <p className="text-sm text-gray-500 mb-1">👁️ Private to you</p>
-        <h4 className="font-semibold mb-1">Maximize your chances to get a job with help from your network</h4>
+        <h4 className="font-semibold mb-1">
+          Maximize your chances to get a job with help from your network
+        </h4>
         <p className="text-sm text-gray-600">
-          85% of job seekers who post find support from their network in their job search.
+          85% of job seekers who post find support from their network in their
+          job search.
         </p>
         <button className="mt-2 px-3 py-1 border border-gray-400 rounded-full text-sm">
           Draft a post
@@ -20,7 +23,7 @@ export default function SuggestionsAnalytics() {
         <div className="flex flex-wrap justify-between text-sm">
           <div>
             <p className="font-semibold">👥 197 profile views</p>
-            <p>Discover who's viewed your profile.</p>
+            <p>Discover who&apos;s viewed your profile.</p>
           </div>
           <div>
             <p className="font-semibold">📊 0 post impressions</p>

@@ -53,6 +53,8 @@ export default function DMainContent({
         : "border-transparent text-gray-500 hover:text-blue-600"
     }`;
 
+  console.log(data, "dadatadatata");
+
   if (data === undefined || data === null) {
     return <CircularProgress />;
   }
@@ -83,19 +85,18 @@ export default function DMainContent({
         </div>
       </div>
 
-      {/* Tab Content */}
-      {activeTab === "Scoring" && (
+      {/* Scoring Tab */}
+      {activeTab === "Scoring" && data && (
         <>
           <h2 className="text-xl font-bold mb-2">My Overall Score</h2>
           <div className="text-gray-600 text-sm mb-6">
             Your score is calculated
           </div>
 
-          {/* Overall Score Circular Progress */}
           <div className="mb-8 w-24">
             <CircularProgressbar
-              value={getPercentage(data.totalScore)}
-              text={`${getPercentage(data.totalScore)}%`}
+              value={getPercentage(data?.totalScore ?? "0/100")}
+              text={`${getPercentage(data?.totalScore ?? "0/100")}%`}
               strokeWidth={10}
               styles={buildStyles({
                 textColor: "#111827",
@@ -106,65 +107,74 @@ export default function DMainContent({
             />
           </div>
 
-          {/* Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Object.entries(data.scoreBreakdown).map(([key, value], idx) => {
-              const percent = getPercentage(value);
-              return (
-                <div
-                  key={idx}
-                  className={`p-4 rounded-lg border ${getColorClass(
-                    percent
-                  )} bg-white shadow-sm`}
-                >
-                  <div className="flex justify-between items-center mb-2">
-                    <h4 className="font-semibold">{decodeCamelCase(key)}</h4>
+            {data?.scoreBreakdown ? (
+              Object.entries(data.scoreBreakdown).map(([key, value], idx) => {
+                const percent = getPercentage(value ?? "0/100");
+                return (
+                  <div
+                    key={idx}
+                    className={`p-4 rounded-lg border ${getColorClass(
+                      percent
+                    )} bg-white shadow-sm`}
+                  >
+                    <div className="flex justify-between items-center mb-2">
+                      <h4 className="font-semibold">{decodeCamelCase(key)}</h4>
+                    </div>
+                    <div className="w-20 mb-3">
+                      <CircularProgressbar
+                        value={percent}
+                        text={`${value ?? "0/100"}`}
+                        strokeWidth={10}
+                        styles={buildStyles({
+                          textColor: "#111827",
+                          pathColor: getProgressColor(percent),
+                          trailColor: "#f3f4f6",
+                          textSize: "18px",
+                        })}
+                      />
+                    </div>
+                    <pre className="text-xs text-gray-600 whitespace-pre-wrap">
+                      {decodeCamelCase(key)}
+                    </pre>
                   </div>
-
-                  <div className="w-20 mb-3">
-                    <CircularProgressbar
-                      value={percent}
-                      text={`${value}`}
-                      strokeWidth={10}
-                      styles={buildStyles({
-                        textColor: "#111827",
-                        pathColor: getProgressColor(percent),
-                        trailColor: "#f3f4f6",
-                        textSize: "18px",
-                      })}
-                    />
-                  </div>
-
-                  <pre className="text-xs text-gray-600 whitespace-pre-wrap">
-                    {decodeCamelCase(key)}
-                  </pre>
-                </div>
-              );
-            })}
+                );
+              })
+            ) : (
+              <p className="text-sm text-gray-500 col-span-full">
+                No score breakdown available.
+              </p>
+            )}
           </div>
 
-          {/* Faults in Profile */}
           <div className="mt-12">
             <h3 className="text-lg font-semibold text-red-600 mb-2">
               Detected Faults in Your Profile
             </h3>
-            <ul className="list-disc list-inside text-sm text-red-500 space-y-1">
-              {data.strengths.map((str, idx) => (
-                <li key={idx}>{str}</li>
-              ))}
-            </ul>
+            {data?.strengths?.length > 0 ? (
+              <ul className="list-disc list-inside text-sm text-red-500 space-y-1">
+                {data.strengths.map((str, idx) => (
+                  <li key={idx}>{str}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-gray-500">No fault data available.</p>
+            )}
           </div>
 
-          {/* Suggestions for Improvement */}
           <div className="mt-10">
             <h3 className="text-lg font-semibold text-blue-600 mb-2">
               Suggestions to Improve Your Profile
             </h3>
-            <ul className="list-disc list-inside text-sm text-blue-500 space-y-1">
-              {data.improvements.map((str, idx) => (
-                <li key={idx}>{str}</li>
-              ))}
-            </ul>
+            {data?.improvements?.length > 0 ? (
+              <ul className="list-disc list-inside text-sm text-blue-500 space-y-1">
+                {data.improvements.map((str, idx) => (
+                  <li key={idx}>{str}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-gray-500">No suggestions available.</p>
+            )}
           </div>
         </>
       )}
