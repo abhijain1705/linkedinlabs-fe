@@ -44,8 +44,6 @@ const Hero: React.FC = () => {
     const jsonData = sessionStorage.getItem(apiResponseKeyName);
 
     if (!url || !jsonData) {
-      toast.error("No data found. Please analyze your profile again.");
-      router.push("/");
       return;
     }
 
