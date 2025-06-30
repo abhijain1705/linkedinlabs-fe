@@ -72,7 +72,7 @@ const Hero: React.FC = () => {
       toast.error("Profile analysis is invalid or incomplete.");
     }
   }, []);
-w
+
   const onSubmit = async (data: FormValues) => {
     try {
       setloader(true);
