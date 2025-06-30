@@ -36,7 +36,7 @@ const Sidebar: React.FC<Props> = ({ isMobile, aiResponse, profileURL }) => {
     try {
       setpromptLoader(true);
       const response = await axios.post(
-        "linkedinlabs-be-production.up.railway.app/api/analyze/analyzeProfilePersonalized",
+        "https://linkedinlabs-be-production.up.railway.app/api/analyze/analyzeProfilePersonalized",
         {
           profileUrl: editedUrl,
           userPrompt: prompt,
@@ -64,7 +64,7 @@ const Sidebar: React.FC<Props> = ({ isMobile, aiResponse, profileURL }) => {
     try {
       setloader(true);
       const response = await axios.post(
-        "]linkedinlabs-be-production.up.railway.app/api/analyze/analyzeProfile",
+        "https://linkedinlabs-be-production.up.railway.app/api/analyze/analyzeProfile",
         {
           profileUrl: editedUrl,
         }

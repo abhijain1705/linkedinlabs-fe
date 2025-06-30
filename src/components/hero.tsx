@@ -78,7 +78,7 @@ const Hero: React.FC = () => {
       setloader(true);
 
       const res = await fetch(
-        "linkedinlabs-be-production.up.railway.app/api/analyze/analyzeProfile",
+        "https://linkedinlabs-be-production.up.railway.app/api/analyze/analyzeProfile",
         {
           method: "POST",
           headers: {
