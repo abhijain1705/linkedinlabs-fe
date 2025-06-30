@@ -20,7 +20,7 @@ const getPercentage = (valueStr: string): number => {
   } else {
     return Number(valueStr) ?? 0;
   }
-};
+}
 
 const decodeCamelCase = (word: string) => {
   return word
