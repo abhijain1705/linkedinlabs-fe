@@ -24,27 +24,64 @@ const Hero: React.FC = () => {
   const onSubmit = async (data: FormValues) => {
     try {
       setloader(true);
-      const response = await axios.post(
-        "http://localhost:5000/api/analyze/analyzeProfile",
-        {
-          profileUrl: data.profileUrl,
+
+      const res = await fetch("http://localhost:5000/api/analyze/analyzeProfile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ profileUrl: data.profileUrl }),
+      });
+
+      let errorMessage = "Server error";
+
+      if (!res.ok) {
+        try {
+          const errorData = await res.json();
+          if (errorData?.error) {
+            errorMessage = errorData.error;
+          }
+        } catch (_) {
+          // JSON parse failed, keep default message
         }
-      );
+
+        toast.error(`Failed: ${errorMessage}`);
+        console.error("❌ Server responded with error:", errorMessage);
+        return; // DO NOT throw — just return
+      }
+
+      let json;
+      try {
+        json = await res.json();
+      } catch (e) {
+        toast.error("Invalid JSON response from server.");
+        console.error("❌ JSON parse error:", e);
+        return;
+      }
+
+      const responseData = json?.data;
+
+      if (!responseData) {
+        toast.error("Invalid response format from server.");
+        return;
+      }
+
       toast.success("Profile analyzed successfully!");
-      sessionStorage.setItem(apiResponseKeyName, JSON.stringify(response.data));
+      sessionStorage.setItem(apiResponseKeyName, JSON.stringify(responseData));
       sessionStorage.setItem(profileURLKeyName, data.profileUrl);
+
       setTimeout(() => {
         router.push("/Dashboard");
       }, 2000);
-      // Handle response (e.g., show results or navigate)
-    } catch (error) {
-      toast.error("Failed to analyze profile. Please try again.");
-      console.error("API Error:", error);
-      // Handle error (e.g., show error message)
+
+    } catch (error: any) {
+      toast.error(`Unexpected error: ${error.message || "Unknown"}`);
+      console.error("⚠️ Unexpected Fetch Error:", error);
     } finally {
       setloader(false);
     }
   };
+
 
   const controls = useAnimation();
 
@@ -106,9 +143,8 @@ const Hero: React.FC = () => {
                 message: "Enter a valid LinkedIn profile URL",
               },
             })}
-            className={`px-4 py-3 border ${
-              errors.profileUrl ? "border-red-500" : "border-black"
-            } rounded-md shadow-[3px_3px_0_0_#000] focus:outline-none focus:ring-2 focus:ring-black`}
+            className={`px-4 py-3 border ${errors.profileUrl ? "border-red-500" : "border-black"
+              } rounded-md shadow-[3px_3px_0_0_#000] focus:outline-none focus:ring-2 focus:ring-black`}
           />
 
           <button

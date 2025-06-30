@@ -53,6 +53,8 @@ export default function DMainContent({
         : "border-transparent text-gray-500 hover:text-blue-600"
     }`;
 
+    console.log(data, )
+
   if (data === undefined || data === null) {
     return <CircularProgress />;
   }

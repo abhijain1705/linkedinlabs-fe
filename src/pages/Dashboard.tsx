@@ -31,19 +31,41 @@ const Dashboard: React.FC<DashboardProps> = ({
   useEffect(() => {
     const url = sessionStorage.getItem(profileURLKeyName);
     const jsonData = sessionStorage.getItem(apiResponseKeyName);
-    if (!url || !jsonData) {
-      toast.error("No data found");
-      router.push("/");
-    } else {
-      setprofileURL(url ?? "");
-      setaiResponse(JSON.parse(jsonData) ?? {});
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  if (!aiResponse) {
-    return <CircularProgress />;
-  }
+    if (!url || !jsonData) {
+      toast.error("No data found. Please analyze your profile again.");
+      router.push("/");
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(jsonData);
+      const content = parsed?.data?.choices?.[0]?.message?.content;
+
+      if (!content || typeof content !== "string") {
+        throw new Error("Missing profile analysis content");
+      }
+
+      const parsedContent = JSON.parse(content);
+
+      // Check for score or if all fields are empty
+      const score = parsedContent?.totalScore || "";
+      const isEmpty = !score || score.startsWith("0") || Object.values(parsedContent.optimizedLinkedinProfile || {}).every(
+        (v) => v === "" || (Array.isArray(v) && v.length === 0)
+      );
+
+      if (isEmpty) {
+        throw new Error("Empty or incomplete profile analysis.");
+      }
+
+      setprofileURL(url);
+      setaiResponse(parsedContent);
+    } catch (err: any) {
+      console.error("❌ Dashboard Load Error:", err.message);
+      toast.error("Profile analysis is invalid or incomplete.");
+      router.push("/");
+    }
+  }, []);
 
   return (
     <div className="dashboard">
@@ -80,7 +102,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 
         {/* Scrollable Main Content */}
         <main className="flex-1 overflow-y-auto h-screen">
-          <DMainContent aiResponse={aiResponse} />
+          {aiResponse && <DMainContent aiResponse={aiResponse} />}
         </main>
       </div>
     </div>
